@@ -43,13 +43,14 @@ public class Point2d {
     }
     
     /** equals method */
-    public boolean equals(Point2d otherPoint){
+    @Override
+    public boolean equals(Object otherPoint){
     	if(!(otherPoint instanceof Point2d)){
     		return false;
     	}else{
-    		otherPoint = (Point2d)otherPoint;
-    		if(otherPoint.xCoord == this.xCoord && 
-    				otherPoint.yCoord == this.yCoord){
+    		Point2d a = (Point2d)otherPoint;
+    		if(a.xCoord == this.xCoord && 
+    				a.yCoord == this.yCoord){
     			return true;
     		}
     		return false;
