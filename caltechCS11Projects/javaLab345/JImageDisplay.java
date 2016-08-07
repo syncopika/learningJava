@@ -20,6 +20,11 @@ public class JImageDisplay extends JComponent {
 		setPreferredSize(new Dimension(width, height));
 	}
 	
+	//method to get image for saving
+	public BufferedImage getImage(){
+		return image;
+	}
+	
 	//paintComponent will draw the image on the frame
 	@Override
 	public void paintComponent(Graphics g){
