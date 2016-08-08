@@ -1,4 +1,5 @@
 import java.awt.geom.Rectangle2D;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -11,6 +12,8 @@ import javax.swing.filechooser.FileFilter;
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 import java.awt.image.BufferedImage;
+import javax.swing.SwingWorker;
+import java.util.ArrayList;
 import java.io.*;
 
 public class FractalExplorer{
@@ -21,8 +24,50 @@ public class FractalExplorer{
 		test.createAndShowGUI();
 		test.drawFractal();
 	}
+	
+	//add a worker to handle multiple threads!!
+	private class FractalWorker extends SwingWorker<Object, Object>{
+		
+		//state vars
+		int yCoordRow;
+		ArrayList<Integer> arrRGB = new ArrayList<Integer>(displaySize);
+		
+		private FractalWorker(int yCoord){
+			yCoordRow = yCoord;
+		}
+		
+		public Object doInBackground(){
+			
+				for(int x = 0; x < displaySize; x++){
+					double xCoord = FractalGenerator.getCoord(range.x, range.x + range.width, displaySize, x);
+					double yCoord = FractalGenerator.getCoord(range.y, range.y + range.height, displaySize, yCoordRow);
+					
+					int numIters = fractal.numIterations(xCoord, yCoord);
+					
+					if(numIters == -1){
+						//display.drawPixel(x, y, 0);
+						arrRGB.add(0);
+						
+					}else{
+						float hue = 0.7f + (float) numIters / 200f;
+						int rgbColor = Color.HSBtoRGB(hue, 1f, 1f);
+						arrRGB.add(rgbColor);
+					}
+				}
+			return null;
+		}
+		
+		public void done(){
+			for(int x = 0; x < arrRGB.size(); x++){
+			display.drawPixel(x, yCoordRow, arrRGB.get(x));
+			}
+			display.repaint(0, 0, yCoordRow, displaySize, 1);
+		}
+		
+	}
+	
 
-	//state vars
+	//state vars for FractalExplorer 
 	private int displaySize;
 	private JImageDisplay display;
 	private FractalGenerator fractal;
@@ -138,7 +183,7 @@ public class FractalExplorer{
 							JOptionPane.showMessageDialog(display, ex.getMessage(), "cannot save image", JOptionPane.ERROR_MESSAGE);
 						}
 						/*
-						//save file to disk
+						//save file to disk (but you have to pick a .png file that already exists...)
 						try{
 							BufferedImage image = display.getImage();
 							File outputFile = chooser.getSelectedFile();
@@ -169,23 +214,9 @@ public class FractalExplorer{
 	//private helper method for displaying fractals
 	private void drawFractal(){
 		for(int x = 0; x < displaySize; x++){
-			for(int y = 0; y < displaySize; y++){
-			
-				double xCoord = FractalGenerator.getCoord(range.x, range.x + range.width, displaySize, x);
-				double yCoord = FractalGenerator.getCoord(range.y, range.y + range.height, displaySize, y);
-				
-				int numIters = fractal.numIterations(xCoord, yCoord);
-				
-				if(numIters == -1){
-					display.drawPixel(x, y, 0);
-				}else{
-					float hue = 0.7f + (float) numIters / 200f;
-					int rgbColor = Color.HSBtoRGB(hue, 1f, 1f);
-					display.drawPixel(x,  y, rgbColor);
-				}
-			}
+			FractalWorker newWorker = new FractalWorker(x);
+			newWorker.execute();
 		}
-		display.repaint();
 	}
 	
 }
