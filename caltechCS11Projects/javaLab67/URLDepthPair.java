@@ -1,5 +1,4 @@
 package webCrawler;
-
 import java.net.MalformedURLException;
 import java.util.*;
 
@@ -19,7 +18,6 @@ public class URLDepthPair{
 		url = aURL;
 		depth = aDepth;
 	}
-	
 	
 	/**
 	 * getString method
@@ -48,8 +46,8 @@ public class URLDepthPair{
 	 * @return
 	 */
 	public static String getHost(String s){
-		//do some regex
-		//get host: www.......edu
+		//What if the string doesn't have www? it still could have the host name. 
+		//maybe create a URL object if just 'http://' is present, then getHostName from that
 		return s.substring(s.indexOf("www."), s.lastIndexOf(".") + 4);
 	}
 	
@@ -94,7 +92,7 @@ public class URLDepthPair{
 	 */
 	public static boolean isURLValid(String url) throws Exception{
 		//if passed string does not start with http://...
-		if(!url.startsWith(URL_PREFIX)){
+		if(!url.contains(URL_PREFIX)){
 			throw new MalformedURLException();
 		}
 		//add the url to linked list
@@ -104,32 +102,32 @@ public class URLDepthPair{
 	/**
 	 * if a line does have the link tags, look at the stuff between the quotes
 	 * parse the URL(s) from string and put them in the linked list
+	 * This function is not yet complete.
+	 * TODO: MAKE A BETTER PARSER
 	 */
-	public static void parseURL(String line, int currentDepth, LinkedList<URLDepthPair> listToAddTo){
-		//System.out.println(line);
-		
+	public static void parseURL(String line, int currentDepth, LinkedList<URLDepthPair> listToAddTo){		
 		//check if ahref is in the line
 		if(line.indexOf(AHREF) == line.lastIndexOf(AHREF)){
-			int startPoint = line.indexOf(QUO_MARK) + 1;
-			int endPoint = line.lastIndexOf(QUO_MARK);
+			line = line.substring(line.indexOf(AHREF)+8, line.lastIndexOf(QUO_MARK));
 			
-			String url = line.substring(startPoint, endPoint);
+			//int startPoint = line.indexOf(URL_PREFIX); //line.indexOf(QUO_MARK) + 1;
 			
+			//int endPoint = line.indexOf(QUO_MARK);//line.lastIndexOf(QUO_MARK);
+			
+			String url = line;//line.substring(startPoint, endPoint);
+		
 			try{
 				if(isURLValid(url)){
-				URLDepthPair newPair = new URLDepthPair(url, currentDepth);
-				//System.out.println(newPair);
-				listToAddTo.add(newPair);
+					URLDepthPair newPair = new URLDepthPair(url, currentDepth);
+					listToAddTo.add(newPair);
 				}
 			}catch(Exception e){
 				System.out.println("error with parseURL");
 			}
-			
+		//there might be multiple links in one line?
 		}else if(line.indexOf(AHREF) != line.lastIndexOf(AHREF)){
-			//there might be multiple links in one line
 			while(line.indexOf(AHREF) != line.lastIndexOf(AHREF)){
 					int ahrefLoc = line.indexOf(AHREF) + AHREF.length(); //get the location of the first instance of ahref
-					
 			}
 		}		
 	}

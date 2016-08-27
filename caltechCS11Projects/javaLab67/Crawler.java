@@ -13,8 +13,8 @@ public class Crawler{
 	int currentDepth = 0;
 	
 	//linked lists to hold URLDepth pairs
-	LinkedList visitedSites = new LinkedList<URLDepthPair>();
-	LinkedList sitesToVisit = new LinkedList<URLDepthPair>();
+	LinkedList<URLDepthPair> visitedSites = new LinkedList<URLDepthPair>();
+	LinkedList<URLDepthPair> sitesToVisit = new LinkedList<URLDepthPair>();
 
 	/**
 	 * constructor for Crawler
@@ -23,11 +23,10 @@ public class Crawler{
 		maxDepth = depth;
 	}
 	
-
 	/**
 	 * return list of sites visited by crawler
 	**/
-	public LinkedList getSites(){
+	public LinkedList<URLDepthPair> getSites(){
 		return sitesToVisit;
 	}
 	
@@ -41,11 +40,13 @@ public class Crawler{
 	public void processURL(String a) throws Exception{
 		
 		//host should be in the format: "http://.....com" with possible path.
+		//URL object should fix up the string 
 		URL url = new URL(a); //URLDepthPair.getHost(a);
 		String host = url.toString();
 		
 		//create initial URLDepthPair
 		URLDepthPair initialPair = new URLDepthPair(host, currentDepth); 
+		
 		//add to linked list
 		visitedSites.add(initialPair);
 		
@@ -60,8 +61,6 @@ public class Crawler{
 			
 			//then set up a writer and hook up the outputstream to it
 			//this sends a request to the host server
-			//URLDepthPair.getDocPath(a)
-			
 			PrintWriter writer = new PrintWriter(os, true);
 			writer.println("GET " + URLDepthPair.getDocPath(a) + " HTTP/1.1");
 			writer.println("Host: " + url.getHost());
@@ -77,7 +76,6 @@ public class Crawler{
 			while (true){
 				String line = br.readLine();
 				//System.out.println(line);
-				
 				if(line == null){
 					//by now, all possible URLs for one page
 					//should've been looked at.
@@ -86,12 +84,14 @@ public class Crawler{
 					currentDepth++;
 					break;
 				}else if(!URLDepthPair.checkLine(line)){
+					//if we come across a non-valid URL,
+					//skip it and continue
 					continue;
 				}else{
 					//find a match for a valid URL
 					//make URLDepthPair, put in linked list
 					if(currentDepth < maxDepth){
-					URLDepthPair.parseURL(line, currentDepth, sitesToVisit);
+						URLDepthPair.parseURL(line, currentDepth, sitesToVisit);
 					}else{
 						break;
 					}
@@ -126,29 +126,28 @@ public class Crawler{
 	//process a url for crawler1
 	try{
 		
-	//get the linked list
-		//http://users.cms.caltech.edu/~donnie/testcrawl/
-		//www.cms.caltech.edu/people
-		/*
-	System.out.println("hi");
-	URL hi = new URL("http://www.cms.caltech.edu/~donnie/testcrawl/");
-	System.out.println(hi.getHost());
-	System.out.println(hi.getPath());
-	*/
-	crawler1.processURL("http://www.cms.caltech.edu/~donnie/testcrawl/");
+	//http://users.cms.caltech.edu/~donnie/testcrawl/
+	//www.cms.caltech.edu/people
+
+	//pass in a URL you want to crawl
+	crawler1.processURL("http://syncopika.tumblr.com");
 	
 	//checked linked list and loop
 	LinkedList<URLDepthPair> sitesToCheck = crawler1.getSites();
-	
+	LinkedList<URLDepthPair> sitesChecked = new LinkedList<URLDepthPair>();;
 	
 	//while(a.size() > 0)
-	for(int i = 0; i < sitesToCheck.size(); i++){
-		String a = sitesToCheck.get(i).getURL();
+	while(sitesToCheck.size() > 0){
+		String a = sitesToCheck.getFirst().getURL();
 		crawler1.processURL(a);
-		//empty list = a.remove(i)
+		sitesChecked.add(sitesToCheck.getFirst());
+		sitesToCheck.removeFirst();
+		System.out.println(sitesChecked);
 	}
-	
-	System.out.println(sitesToCheck);
+		
+	for(int i = 0; i < sitesChecked.size(); i++){
+		System.out.println(sitesChecked.get(i));
+	}
 	
 	}catch(IOException e){
 		System.out.println("IO error hi");
