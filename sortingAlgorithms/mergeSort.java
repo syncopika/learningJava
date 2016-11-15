@@ -27,7 +27,6 @@ public class MergeSort{
 		sort(left);
 		sort(right);
 
-		// make sure "data" is updated to be the sorted set
 		merge(left, right, data);
 
 	}
