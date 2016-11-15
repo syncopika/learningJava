@@ -6,7 +6,7 @@ public class BubbleSort{
     	//so that I can change its value later
     	//to slightly optimize the sorting
   
-  	int newEndpoint = data.length - 1;
+  		int newEndpoint = data.length - 1;
     
    	//the trick is if during an iteration no swap is needed, 
     	//the sorting is done and the program can terminate.
@@ -21,13 +21,13 @@ public class BubbleSort{
 			
 			for(int j = 0; j < newEndpoint; j++){
 				if(data[j] > data[j+1]){
-				//swap
-				int temp = data[j];
-				data[j] = data[j+1];
-				data[j+1] = temp;
+					//swap
+					int temp = data[j];
+					data[j] = data[j+1];
+					data[j+1] = temp;
 						
-				lastSwap = j; //record the index of the last swap
-				isSorted = false;					
+					lastSwap = j; //record the index of the last swap
+					isSorted = false;					
 				}
 			}
 			if(isSorted){
