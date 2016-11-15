@@ -1,45 +1,39 @@
 public class BubbleSort{
-
-	public void sort(int[] data) {
 	
-    //I'm setting the variable "newEndpoint" here
-    //so that I can change its value later
-    //to slightly optimize the sorting
+	public void sort(int[] data) {
+		
+	//I'm setting the variable "newEndpoint" here
+    	//so that I can change its value later
+    	//to slightly optimize the sorting
+  
+  	int newEndpoint = data.length - 1;
     
-    int newEndpoint = data.length - 1;
-    
-    //the trick is when you get to the end
-    //of the data set and you don't need to swap,
-    //(that is, there is already a sorted pair at the end)
-    //you can decrease the number of times you have to
-    //go through the data set
+   	//the trick is if during an iteration no swap is needed, 
+    	//the sorting is done and the program can terminate.
+		
+    	//additionally, you can keep track of where the index was of
+	//the last swap, and update newEndpoint
 		
 		for(int i = 0; i < data.length; i++){
 			
 			int lastSwap = 0;
-			boolean isSorted = false;
+			boolean isSorted = true;
 			
 			for(int j = 0; j < newEndpoint; j++){
-				
-					if(data[j] > data[j+1]){
+				if(data[j] > data[j+1]){
+				//swap
+				int temp = data[j];
+				data[j] = data[j+1];
+				data[j+1] = temp;
 						
-						//swap
-						int temp = data[j];
-						data[j] = data[j+1];
-						data[j+1] = temp;
-						
-						lastSwap = j; //record the index of the last swap
-						isSorted = true;
-						
-					}
-			}
-				if(!isSorted){
-					return; //if no swap occurred, don't update "newEndpoint"
+				lastSwap = j; //record the index of the last swap
+				isSorted = false;					
 				}
-				newEndpoint = lastSwap;
+			}
+			if(isSorted){
+				break; //done sorting!
+			}
+			newEndpoint = lastSwap;
 		}
-		
-		
 	}
-
 }
