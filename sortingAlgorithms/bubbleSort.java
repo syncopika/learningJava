@@ -34,7 +34,7 @@ public class BubbleSort{
 					}
 			}
 				if(!isSorted){
-					return; //if no swap occurred, don't update "count"
+					return; //if no swap occurred, don't update "newEndpoint"
 				}
 				newEndpoint = lastSwap;
 		}
