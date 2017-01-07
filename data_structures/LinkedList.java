@@ -174,5 +174,63 @@ public class LinkedList<T> {
 		System.out.println("The length of the list is: " + length);
 	}
 	
+	/*
+	 *  equals method! important!
+	 */
+	public boolean equals(Object o){
+		
+		if(this == o){
+			return true;
+		}
+		
+		if(!(o instanceof LinkedList)){
+			return false;
+		}
+		
+		LinkedList<T> l = (LinkedList<T>)o;
+		
+		if(l.getLength() != length){
+			return false;
+		}
+		
+		Node<T> otherList = l.head;
+		Node<T> thisList = head;
+		
+		while(thisList != null && otherList != null){
+			if(!thisList.data.equals(otherList.data)){
+				return false;
+			}
+			thisList = thisList.next;
+			otherList = otherList.next;
+		}
+		
+		return true;
+	}
+	
+	
+	/*
+	 *	hash code method
+	 */
+	public int hashCode(){
+		
+		int constant = 5;
+		int total = 0;
+		
+		Node<T> curr = head;
+		Node<T> prev = null;
+		
+		while(curr != null){
+			if(prev == null){
+				total += constant*curr.data.hashCode();
+			}else{
+				int diff = Math.abs(prev.data.hashCode() - curr.data.hashCode());
+				total += diff;
+			}
+			prev = curr;
+			curr = curr.next;
+		}
+		
+		return total;
+	}
 	
 }
