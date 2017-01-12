@@ -83,79 +83,70 @@ public class BST<T extends Comparable<T>>{
 		if(start == null){
 			return;
 		}
-		
 		//what if only one node in tree (the root?)
 		if(start == root && isLeaf(start) && start.data.equals(data)){
 			root = null;
 			return;
 		}else if(start == root && root.data.equals(data)){
+			//if root is to be removed and tree has > 1 node
 			if(getMax(start.left) != null){
 				//replace the data!
 				start.data = getMax(start.left).data;
-				//recurse again until a leaf is reached
 				removeHelper(start.left, start.data);
 			}else if(getMin(start.right) != null){
 				start.data = getMin(start.right).data;
 				removeHelper(start.right, start.data);
 			}
 		}else{
-		//check if data is less than or more than start.data.
-		//this will tell us which direction to go.
-		boolean goLeft = data.compareTo(start.data) <= 0 ? true : false;
-		boolean goRight = data.compareTo(start.data) >= 0 ? true : false;
+			//check if data is less than or more than start.data.
+			//this will tell us which direction to go.
+			boolean goLeft = data.compareTo(start.data) <= 0 ? true : false;
+			boolean goRight = data.compareTo(start.data) >= 0 ? true : false;
 		
-		//look left if goLeft
-		if(start.left != null && goLeft){	
-			//if a left node is the target and it is a leaf, just make it null
-			if(start.left.data.equals(data) && isLeaf(start.left)){
-				start.left = null;
-				return;
-			}else if(start.left.data.equals(data)){
-				//left node is to be removed and NOT a leaf.
-				//replace data with either MAX node from LEFT subtree, if it exists,
-				//or MIN node from RIGHT subtree.
-				if(getMax(start.left) != null){
-					//replace the data!
-					start.left.data = getMax(start.left).data;
-					//recurse again until a leaf is reached
+			//look left if goLeft
+			if(start.left != null && goLeft){	
+				//if a left node is the target and it is a leaf, just make it null
+				if(start.left.data.equals(data) && isLeaf(start.left)){
+					start.left = null;
+					return;
+				}else if(start.left.data.equals(data)){
+					//left node is to be removed and NOT a leaf.
+					//replace data with either MAX node from LEFT subtree, if it exists,
+					//or MIN node from RIGHT subtree.
+					if(getMax(start.left) != null){
+						//replace the data!
+						start.left.data = getMax(start.left).data;
+					}else if(getMin(start.right) != null){
+						start.left.data = getMin(start.right).data;
+					}
 					removeHelper(start.left, start.left.data);
-				}else if(getMin(start.right) != null){
-					start.left.data = getMin(start.right).data;
-					removeHelper(start.right, start.right.data);
-				}
-			}else{
-				//keep looking either left or right
-				if(data.compareTo(start.left.data) <= 0){
-					removeHelper(start.left, data);
-				}else{
-					removeHelper(start.right, data);
+					return;
 				}
 			}
-		}
-		//same for right side
-		if(start.right != null && goRight){
-			if(start.right.data.equals(data) && isLeaf(start.right)){
-				start.right = null;
-				return;
-			}else if(start.right.data.equals(data)){
-				if(getMax(start.right) != null){
-					//replace the data!
-					start.right.data = getMax(start.right).data;
-					//recurse again until a leaf is reached
+			
+			//same for right side
+			if(start.right != null && goRight){
+				if(start.right.data.equals(data) && isLeaf(start.right)){
+					start.right = null;
+					return;
+				}else if(start.right.data.equals(data)){
+					if(getMax(start.right) != null){
+						//replace the data!
+						start.right.data = getMax(start.right).data;
+					}else if(getMin(start.right) != null){
+						start.right.data = getMin(start.right).data;
+					}
 					removeHelper(start.right, start.right.data);
-				}else if(getMin(start.right) != null){
-					start.right.data = getMin(start.right).data;
-					removeHelper(start.right, start.right.data);
-				}
-			}else{
-				if(data.compareTo(start.right.data) <= 0){
-					removeHelper(start.left, data);
-				}else{
-					removeHelper(start.right, data);
+					return;
 				}
 			}
-		}
-		
+			
+			//keep looking either left or right
+			if(data.compareTo(start.right.data) <= 0){
+				removeHelper(start.left, data);
+			}else{
+				removeHelper(start.right, data);
+			}	
 		}
 	}
 	
