@@ -87,60 +87,52 @@ public class BST<T extends Comparable<T>>{
 		if(start == root && isLeaf(start) && start.data.equals(data)){
 			root = null;
 			return;
-		}else if(start == root && root.data.equals(data)){
-			//if root is to be removed and tree has > 1 node
-			if(getMax(start.left) != null){
-				//replace the data!
-				start.data = getMax(start.left).data;
-				removeHelper(start.left, start.data);
-			}else if(getMin(start.right) != null){
-				start.data = getMin(start.right).data;
-				removeHelper(start.right, start.data);
-			}
-		}else{
-			//check if data is less than or more than start.data.
-			//this will tell us which direction to go.
-			boolean goLeft = data.compareTo(start.data) <= 0 ? true : false;
-			boolean goRight = data.compareTo(start.data) >= 0 ? true : false;
+		}
 		
-			//look left if goLeft
-			if(start.left != null && goLeft){	
-				//if a left node is the target and it is a leaf, just make it null
-				if(start.left.data.equals(data) && isLeaf(start.left)){
-					start.left = null;
-					return;
-				}else if(start.left.data.equals(data)){
-					//left node is to be removed and NOT a leaf.
-					//replace data with either MAX node from LEFT subtree, if it exists,
-					//or MIN node from RIGHT subtree.
-					if(getMax(start.left) != null){
-						//replace the data!
-						start.left.data = getMax(start.left).data;
-					}else if(getMin(start.right) != null){
-						start.left.data = getMin(start.right).data;
-					}
-					removeHelper(start.left, start.left.data);
-					return;
+		//base cases
+		if(start.left != null){
+			if(start.left.data.equals(data) && isLeaf(start.left)){
+				start.left = null;
+				return;
+			}
+		}
+		
+		if(start.right != null){
+			if(start.right.data.equals(data) && isLeaf(start.right)){
+				start.right = null;
+				return;
+			}
+		}
+		
+		//if target is inner node
+		if(start.data.equals(data)){
+			
+			if(start.left != null){
+				//get the max from left subtree
+				//and replace current node value with it
+				//this value will be the new target data to remove
+				start.data = getMax(start.left).data;
+				
+				//then check if the left node of the current node
+				//has the new target value. if it does, start recursion
+				//at this current node again. otherwise, move on.
+				if(start.left.data.equals(start.data)){
+					removeHelper(start, start.data);
+				}else{
+					removeHelper(start.left, start.data);
+				}
+			}else if(start.right != null){
+				
+				start.data = getMin(start.right).data;
+				
+				if(start.right.data.equals(start.data)){
+					removeHelper(start, start.data);
+				}else{
+					removeHelper(start.right, start.data);
 				}
 			}
 			
-			//same for right side
-			if(start.right != null && goRight){
-				if(start.right.data.equals(data) && isLeaf(start.right)){
-					start.right = null;
-					return;
-				}else if(start.right.data.equals(data)){
-					if(getMax(start.right) != null){
-						//replace the data!
-						start.right.data = getMax(start.right).data;
-					}else if(getMin(start.right) != null){
-						start.right.data = getMin(start.right).data;
-					}
-					removeHelper(start.right, start.right.data);
-					return;
-				}
-			}
-			
+		}else{
 			//keep looking either left or right
 			if(data.compareTo(start.right.data) <= 0){
 				removeHelper(start.left, data);
