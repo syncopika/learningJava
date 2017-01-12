@@ -105,8 +105,7 @@ public class BST<T extends Comparable<T>>{
 		}
 		
 		//if target is inner node
-		if(start.data.equals(data)){
-			
+		if(start.data.equals(data)){		
 			if(start.left != null){
 				//get the max from left subtree
 				//and replace current node value with it
@@ -116,7 +115,7 @@ public class BST<T extends Comparable<T>>{
 				//then check if the left node of the current node
 				//has the new target value. if it does, start recursion
 				//at this current node again. otherwise, move on.
-				if(start.left.data.equals(start.data)){
+				if(start.left.data.equals(start.data) && isLeaf(start.left)){
 					removeHelper(start, start.data);
 				}else{
 					removeHelper(start.left, start.data);
@@ -125,16 +124,15 @@ public class BST<T extends Comparable<T>>{
 				
 				start.data = getMin(start.right).data;
 				
-				if(start.right.data.equals(start.data)){
+				if(start.right.data.equals(start.data) && isLeaf(start.right)){
 					removeHelper(start, start.data);
 				}else{
 					removeHelper(start.right, start.data);
 				}
 			}
-			
 		}else{
 			//keep looking either left or right
-			if(data.compareTo(start.right.data) <= 0){
+			if(data.compareTo(start.data) <= 0){
 				removeHelper(start.left, data);
 			}else{
 				removeHelper(start.right, data);
@@ -144,6 +142,9 @@ public class BST<T extends Comparable<T>>{
 	
 	//helper method - checks if a node is a leaf
 	private boolean isLeaf(Node<T> n){
+		if(n == null){
+			return false;
+		}
 		if(n.left == null && n.right == null){
 			return true;
 		}
