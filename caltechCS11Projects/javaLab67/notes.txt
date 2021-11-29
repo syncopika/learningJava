@@ -1,0 +1,4 @@
+how to use:
+javac crawler Crawler.java URLDepthPair.java
+cd crawler
+java webCrawler.Crawler
