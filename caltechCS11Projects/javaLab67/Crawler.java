@@ -50,6 +50,8 @@ public class Crawler{
 		//add to linked list
 		visitedSites.add(initialPair);
 		
+        // TODO: use SSL Socket? https://stackoverflow.com/questions/18787419/ssl-socket-connection
+        // see https://stackoverflow.com/questions/45415145/https-get-http-1-1-request-through-java-socket
 		//then explore the initial URL
         //attempt to connect (port by default is 80)
         Socket sock = new Socket(url.getHost(), 80);
@@ -77,19 +79,14 @@ public class Crawler{
             String line = br.readLine();
             System.out.println(line);
             if(line == null){
-                //by now, all possible URLs for one page
-                //should've been looked at.
-                //therefore, one depth has been looked at.
-                //increment the currentDepth by one.
+                //checked all the URLs for the page
                 currentDepth++;
                 break;
             }else if(!URLDepthPair.checkLine(line)){
-                //if we come across a non-valid URL,
-                //skip it and continue
+                //if we come across a non-valid URL
                 continue;
             }else{
-                //find a match for a valid URL
-                //make URLDepthPair, put in linked list
+                //found a match for a valid URL
                 if(currentDepth < maxDepth){
                     URLDepthPair.parseURL(line, currentDepth, sitesToVisit);
                 }else{
@@ -126,7 +123,7 @@ public class Crawler{
             //www.cms.caltech.edu/people
             
             //pass in a URL you want to crawl
-            crawler1.processURL("http://syncopika.tumblr.com");
+            crawler1.processURL("http://syncopika.tumblr.com/"); // getting a redirect :/
             
             //checked linked list and loop
             LinkedList<URLDepthPair> sitesToCheck = crawler1.getSites();

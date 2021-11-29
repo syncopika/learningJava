@@ -3,10 +3,16 @@ package threadBasics;
 // can use a Runnable for a thread
 public class BasicRunnable implements Runnable{
     
-    // TODO: create a constructor so we can pass stuff to an instance
-    // of this class that we can modify in the run() method
+    private SomeObject obj;
+    
+    public BasicRunnable(SomeObject obj){
+        this.obj = obj;
+    }
     
     public void run(){
-        System.out.println("hello from thread");
+        //System.out.println("hello from thread");
+        obj.increment();
+        obj.decrement();
+        System.out.println(obj.state());
     }
 }

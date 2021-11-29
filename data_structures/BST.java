@@ -145,10 +145,7 @@ public class BST<T extends Comparable<T>>{
 		if(n == null){
 			return false;
 		}
-		if(n.left == null && n.right == null){
-			return true;
-		}
-		return false;
+		return n.left == null && n.right == null;
 	}
 	
 	//another helper method - find the maximum value node
