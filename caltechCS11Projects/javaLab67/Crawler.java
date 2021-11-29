@@ -5,7 +5,6 @@ import java.util.*;
 import java.net.UnknownHostException;
 
 public class Crawler{
-	
 	//max depth is set by user upon initializing a new Crawler()
 	int maxDepth;
 	
@@ -18,7 +17,7 @@ public class Crawler{
 
 	/**
 	 * constructor for Crawler
-	 */
+	**/
 	public Crawler(int depth){
 		maxDepth = depth;
 	}
@@ -40,7 +39,7 @@ public class Crawler{
 	public void processURL(String urlStr) throws Exception{
 		//host should be in the format: "http://.....com" with possible path.
 		//URL object should fix up the string 
-        System.out.println("checking: " + urlStr);
+        //System.out.println("checking: " + urlStr);
         
 		URL url = new URL(urlStr); //URLDepthPair.getHost(a);
 		String host = url.toString();
@@ -105,7 +104,6 @@ public class Crawler{
 
 	public static void main(String[] args) throws Exception{
 		/*
-	
         //let's assume user will input correctly for now
         Scanner scan = new Scanner(System.in);
         
@@ -117,9 +115,8 @@ public class Crawler{
         
         scan.close();
         //int webPort = 80;
-	
 		*/
-    
+        
         //set up new crawler
         Crawler crawler1 = new Crawler(2);
         
@@ -127,7 +124,7 @@ public class Crawler{
         try{
             //http://users.cms.caltech.edu/~donnie/testcrawl/
             //www.cms.caltech.edu/people
-
+            
             //pass in a URL you want to crawl
             crawler1.processURL("http://syncopika.tumblr.com");
             
@@ -140,13 +137,13 @@ public class Crawler{
                 crawler1.processURL(site);
                 sitesChecked.add(sitesToCheck.getFirst());
                 sitesToCheck.removeFirst();
-                System.out.println(sitesChecked);
+                //System.out.println(sitesChecked);
             }
                 
             for(int i = 0; i < sitesChecked.size(); i++){
                 System.out.println(sitesChecked.get(i));
             }
-        
+            
         }catch(IOException e){
             System.out.println("IO error hi");
         }

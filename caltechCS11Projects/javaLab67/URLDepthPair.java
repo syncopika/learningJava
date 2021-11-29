@@ -6,7 +6,6 @@ import java.util.*;
  * special inner class for creating URLDepth pairs
 */
 public class URLDepthPair{
-	
 	public static final String URL_PREFIX = "http://";
 	private static final String AHREF = "a href=\"";
 	private static final String QUO_MARK = "\"";
@@ -21,21 +20,21 @@ public class URLDepthPair{
 	
 	/**
 	 * getString method
-	 */
+	**/
 	public String toString(){
 		return "URL: " + url + ", depth: " + depth; 
 	}
 	
 	/**
 	 * get the url from a URLDepthPair object
-	 */
+	**/
 	public String getURL(){
 		return url;
 	}
 	
 	/**
 	 * get the depth from a URLDepthPair object
-	 */
+	**/
 	public int getDepth(){
 		return depth;
 	}
@@ -44,7 +43,7 @@ public class URLDepthPair{
 	 * get the host url
 	 * @param s
 	 * @return
-	 */
+	**/
 	public static String getHost(String s){
 		//What if the string doesn't have www? it still could have the host name. 
 		//maybe create a URL object if just 'http://' is present, then getHostName from that
@@ -55,9 +54,8 @@ public class URLDepthPair{
 	 * get proper path from host url
 	 * @param s
 	 * @return the string that should have just the resource path, or "/"
-	 */
+	**/
 	public static String getDocPath(String s){
-		
 		//i.e. www.cms.caltech.edu/people
 		//complicated? way to check - see if there's a slash included if you use lastIndex of "."
 		String url = s.substring(s.lastIndexOf("."), s.length());
@@ -76,7 +74,7 @@ public class URLDepthPair{
 	 * check if a line has the proper tags for links (doesn't check if link is valid url though)
 	 * @param s
 	 * @return true if line has what we want (link tags)
-	 */
+	**/
 	public static boolean checkLine(String s){
 		if(s.indexOf(AHREF) >= 0){
 			return true;
@@ -89,7 +87,7 @@ public class URLDepthPair{
 	 * @param url
 	 * @return
 	 * @throws Exception
-	 */
+	**/
 	public static boolean isURLValid(String url) throws Exception{
 		//if passed string does not start with http://...
 		if(!url.contains(URL_PREFIX)){
@@ -104,14 +102,12 @@ public class URLDepthPair{
 	 * parse the URL(s) from string and put them in the linked list
 	 * This function is not yet complete.
 	 * TODO: MAKE A BETTER PARSER
-	 */
-	public static void parseURL(String line, int currentDepth, LinkedList<URLDepthPair> listToAddTo){		
+	**/
+	public static void parseURL(String line, int currentDepth, LinkedList<URLDepthPair> listToAddTo){
 		//check if ahref is in the line
 		if(line.indexOf(AHREF) == line.lastIndexOf(AHREF)){
 			line = line.substring(line.indexOf(AHREF)+8, line.lastIndexOf(QUO_MARK));
-			
 			//int startPoint = line.indexOf(URL_PREFIX); //line.indexOf(QUO_MARK) + 1;
-			
 			//int endPoint = line.indexOf(QUO_MARK);//line.lastIndexOf(QUO_MARK);
 			
 			String url = line;//line.substring(startPoint, endPoint);
@@ -131,6 +127,5 @@ public class URLDepthPair{
 			}
 		}		
 	}
-	
 
 }//end URLDepthPair
