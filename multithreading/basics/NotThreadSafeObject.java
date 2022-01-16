@@ -16,7 +16,7 @@ public class NotThreadSafeObject extends SomeObject{
         this.name = name;
     }
     
-    public void increment(){
+    public synchronized void increment(){
         theValue++;
     }
     

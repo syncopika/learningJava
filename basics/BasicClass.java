@@ -1,9 +1,11 @@
 package basics;
 
+import java.util.*;
+
 // javac BasicClass.java -d ./
 // java BasicClass.java
 
-public class BasicClass {
+public class BasicClass implements Comparable<BasicClass> {
     
     private int someNumber;
     private String someString;
@@ -11,6 +13,15 @@ public class BasicClass {
     public BasicClass(int x, String str){
         someNumber = x;
         someString = str;
+    }
+    
+    // make BasicClass objects comparable to each other.
+    // alternatively, you can just create a Comparator class
+    // to define how BasicClass objects should be compared
+    // and pass that to Collections.sort
+    @Override
+    public int compareTo(BasicClass other){
+        return Integer.compare(this.someNumber, other.someNumber);
     }
     
     // if equals is overridden, then hashCode needs to be overridden as well
@@ -52,10 +63,19 @@ public class BasicClass {
     public static void main(String[] args){
         BasicClass bc1 = new BasicClass(5, "hello");
         BasicClass bc2 = new BasicClass(5, "hello");
+        BasicClass bc3 = new BasicClass(7, "bye");
         System.out.println(bc1.equals(bc1));
+        System.out.println(bc1.equals(bc2));
         System.out.println(bc1.equals(bc2));
         System.out.println(bc1.hashCode());
         System.out.println(bc1.hashCode() == bc2.hashCode());
+        
+        ArrayList<BasicClass> basicList = new ArrayList<BasicClass>();
+        basicList.add(bc3);
+        basicList.add(bc1);
+        System.out.println(basicList);
+        Collections.sort(basicList);
+        System.out.println(basicList);
     }
     
 }
